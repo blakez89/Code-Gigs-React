@@ -1,27 +1,29 @@
-import React, { Component } from 'react';
-import './app.css';
-import ReactImage from './react.png';
-
-
+import React, { Component } from "react";
+import "./app.css";
+import SearchBar from "./SearchBar/SearchBar";
+import MainPanel from "./MainPanel/MainPanel";
+import GigList from "./GigList/GigList";
+import { AddGigFunction } from "./AddGig/AddGigFunction";
+import { BrowserRouter as Router, Route, Link } from "react-router-dom";
 
 export default class App extends Component {
-  state = { username: null,
-    gigs: []
-  };
-
-  componentDidMount() {
-    fetch('/api/getUsername')
-      .then(res => res.json())
-      .then(user => this.setState({ username: user.username }));
-  }
-
   render() {
-    const { username } = this.state;
     return (
-      <div>
-        {username ? <h1>{`Hello ${username}`}</h1> : <h1>Loading.. please wait!</h1>}
-        <img src={ReactImage} alt="react" />
-      </div>
+      <Router className="wrapstuff">
+        <MainPanel />
+
+        <Route exact path="/" render={() => <SearchBar />} />
+
+        <Route exact path="/gigs" render={() => <GigList />} />
+
+        <Route
+          exact
+          path="/addgig"
+          render={() => (
+            <AddGigFunction />
+          )}
+        />
+      </Router>
     );
   }
 }
