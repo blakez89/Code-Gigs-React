@@ -1,11 +1,63 @@
 import React, { useState } from "react";
+import { Redirect } from "react-router-dom";
 
 export const AddGigFunction = () => {
   const [gigTitle, setGigTitle] = useState("");
   const [gigTech, setGigTech] = useState("");
-  const [gigBudget, setGigBudget] = useState(500);
+  const [gigBudget, setGigBudget] = useState(0);
   const [gigDesc, setGigDesc] = useState("");
   const [gigEmail, setGigEmail] = useState("");
+
+  const [redirect, setRedirect] = useState(false);
+
+  const renderRedirect = () => {
+    if (redirect) {
+      return <Redirect to="/" />;
+    }
+  };
+
+  const allData = {
+    title: gigTitle,
+    technologies: gigTech,
+    budget: gigBudget,
+    description: gigDesc,
+    contact_email: gigEmail
+  };
+  const url = "/api/add";
+
+  const submitGig = () => {
+    fetch(url, {
+      method: "POST",
+      body: JSON.stringify(allData),
+      headers: {
+        "Content-Type": "application/json"
+      }
+    })
+      .then(res => res.json())
+      .then(response => {
+        if (response.status === "success") {
+          alert("Success!");
+          setRedirect(true);
+        } else {
+          alert("Sorry there was a problem with your input");
+        }
+      })
+      .catch(error => console.error("Error:", error));
+  };
+
+  const submitButton = () => {
+    return (
+      <input
+        type="submit"
+        value="Add Gig"
+        onClick={e => {
+          e.preventDefault();
+          submitGig();
+        }}
+        className="btn btn-reverse"
+      />
+    );
+  };
 
   return (
     <div>
@@ -84,18 +136,12 @@ export const AddGigFunction = () => {
                 required
               />
             </div>
-            <input
-              type="submit"
-              value="Add Gig"
-              onClick={e => {
-                e.preventDefault();
-                console.log(gigTitle, gigTech, gigBudget, gigDesc, gigEmail);
-              }}
-              className="btn btn-reverse"
-            />
+            {renderRedirect()}
+            {submitButton()}
           </form>
         </div>
       </section>
+      <div />
     </div>
   );
 };

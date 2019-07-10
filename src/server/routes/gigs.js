@@ -24,30 +24,7 @@ router.get('/add',(req,res)=>{
 })
 
 // Add a gig
-router.post('/add', (req,res)=>{
-    const data = {
-        title: 'Simple wordpress website',
-        technologies: 'react,js,html,css',
-        budget: '$1000',
-        description: 'Im the description',
-        contact_email: 'user2@gmail.com'
-    }
 
-let {title,technologies,budget,description,contact_email} = data;
-
-// insert into table
-Gig.create({
-    title,
-    technologies,
-    description,
-    budget,
-    contact_email
-})
-.then(gig=>res.redirect('/gigs'))
-.catch(err=>console.log(err))
-
-
-});
 
 
 

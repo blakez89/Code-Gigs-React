@@ -6,14 +6,11 @@ import uuid from "uuid/v1";
 class GigList extends Component {
     state = { gigs: [] }
 
-
     componentDidMount() {
       fetch('/api/gigs')
         .then(res => res.json())
         .then(gigs => this.setState({ gigs }));
     }
-
-
 
     createGigs = () =>{
       return this.state.gigs.map(gig=>
@@ -29,14 +26,12 @@ class GigList extends Component {
         </div>
       </div>
       )
-      
-    
     }
 
     render() { 
         
         return ( 
-          <section id="gigs" className="container">  
+          <section id="gigs" className="container">
         {this.createGigs()}
       </section>   
       

@@ -8,6 +8,7 @@ const app = express();
 
 app.listen(process.env.PORT || 8080, () => console.log(`Listening on port ${process.env.PORT || 8080}!`));
 
+app.use(express.json())
 app.use(express.static('dist'));
 
 const db = require('./config/database');
@@ -21,8 +22,6 @@ db.authenticate()
 
 // Routes
 
-app.get('/api/getUsername', (req, res) => res.send({ username: os.userInfo().username }));  
-
 app.get('/api/gigs', (req,res)=>{
 
     Gig.findAll()
@@ -30,4 +29,28 @@ app.get('/api/gigs', (req,res)=>{
         res.send(gigs);
     })
     .catch(err=>console.log(err))
+})
+
+app.post('/api/add', (req,res)=>{
+ let {title,technologies,budget,description,contact_email} = req.body;
+
+ if(req.body.title.length < 1){
+  return res.status(400).json({
+    status: 'fail',
+    message: 'Missing title'
+  });
+ }
+
+ Gig.create({
+  title,
+  technologies,
+  description,
+  budget,
+  contact_email
+})
+
+.then(()=>res.status(200).json({status: 'success'}))
+.catch(err=>console.log(err)) 
+
+
 })
